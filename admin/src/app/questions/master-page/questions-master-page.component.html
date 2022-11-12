@@ -1,0 +1,33 @@
+<div class="container">
+  <h1 class="mb-3">Questions</h1>
+</div>
+
+<div class="row mb-3">
+  <div class="col"></div>
+  <div class="col-auto">
+    <a class="btn btn-outline-primary" routerLink="/app/questions/create">Create a Question</a>
+  </div>
+</div>
+
+<table class="table">
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Question text</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let question of questions">
+    <td>{{question.id}}</td>
+    <td>{{question.question}}</td>
+    <td class="text-nowrap">
+      <a [routerLink]="['/app', 'questions', question.id]" class="btn btn-outline-primary">Edit</a>
+      &nbsp;
+      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirm">
+        Remove
+      </button>
+    </td>
+  </tr>
+  </tbody>
+</table>
