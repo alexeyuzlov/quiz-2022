@@ -8,7 +8,7 @@ import { Question } from '../entities/question';
 })
 export class QuestionService {
   get api() {
-    return `http://localhost:3000/questions/`;
+    return `/api/questions/`;
   }
 
   constructor(
@@ -32,7 +32,7 @@ export class QuestionService {
     return this._http.put<Question>(`${this.api}${question.id}`, question);
   }
 
-  public remove(id: number) {
+  public remove(id: number): Observable<unknown> {
     return this._http.delete(`${this.api}${id}`);
   }
 }

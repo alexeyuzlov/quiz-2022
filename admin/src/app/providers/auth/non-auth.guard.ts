@@ -17,8 +17,6 @@ export class NonAuthGuard implements CanActivate {
   public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     return this._authState.get().pipe(
       map((user: IUser | null) => {
-        console.info('non auth guard');
-
         if (!user) {
           return true;
         }

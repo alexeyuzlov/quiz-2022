@@ -5,6 +5,8 @@ export interface IUser {
   userName: string;
 }
 
+export const AUTH_KEY = 'user';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -12,7 +14,7 @@ export class AuthState {
   public user: IUser | null = null;
 
   public get(): Observable<IUser> {
-    const user = localStorage.getItem('user');
+    const user = localStorage.getItem(AUTH_KEY);
     const result = user ? JSON.parse(user) : null;
 
     return of(result);
@@ -20,14 +22,14 @@ export class AuthState {
 
   public set(user: IUser): Observable<any> {
     this.user = user;
-    localStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem(AUTH_KEY, JSON.stringify(user));
 
     return of(null);
   }
 
   public logout(): Observable<any> {
     this.user = null;
-    localStorage.removeItem('user');
+    localStorage.removeItem(AUTH_KEY);
 
     return of(null);
   }

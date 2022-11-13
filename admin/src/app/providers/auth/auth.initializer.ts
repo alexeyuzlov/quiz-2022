@@ -6,5 +6,5 @@ export function authInitializer(authState: AuthState) {
     switchMap((user: IUser | null) => {
       return user ? authState.set(user) : of(null)
     })
-  ).toPromise();
+  );
 }

@@ -1,5 +1,13 @@
 <router-outlet></router-outlet>
 
+<div *ngIf="loadingGlobalState.loading" class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div class="toast show">
+    <div class="toast-body">
+      <strong class="me-auto">Loading...</strong>
+    </div>
+  </div>
+</div>
+
 <!--<div class="modal fade" id="confirm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
 <!--  <div class="modal-dialog">-->
 <!--    <div class="modal-content">-->

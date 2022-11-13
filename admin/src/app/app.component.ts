@@ -1,9 +1,13 @@
 import { Component } from '@angular/core';
+import { LoadingGlobalState } from './providers/loading-global.state';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+  constructor(
+    public loadingGlobalState: LoadingGlobalState
+  ) {
+  }
 }
