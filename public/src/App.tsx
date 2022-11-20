@@ -1,63 +1,83 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Header } from './Header';
+import { Footer } from './Footer';
+import { CorrectAnswer } from './CorrectAnswer';
+import { Results } from './Results';
+import { Question } from './Question';
+import { ICorrectAnswer, IQuestion } from './entities';
 
 function App() {
+    const [questions, setQuestions] = useState<IQuestion[]>([]);
+    const [index, setIndex] = useState<number>(-1);
+    const [total, setTotal] = useState<number>(0);
+    const [completed, setCompleted] = useState<boolean>(false);
+    const [question, setQuestion] = useState<IQuestion>();
+    const [answered, setAnswered] = useState<boolean>(false);
+    const [correctAnswer, setCorrectAnswer] = useState<ICorrectAnswer>();
+    const [totalResults, setTotalResults] = useState<number>(0);
+
+    useEffect(() => {
+        fetch('/db.json')
+            .then((r) => r.json())
+            .then((all) => {
+                setQuestions(all.questions);
+                setTotal(all.questions.length);
+                setIndex(0);
+            });
+    }, []);
+
+    useEffect(() => {
+        setQuestion(questions[index]);
+        setAnswered(false);
+    }, [index]);
+
+    const userAnswered = (answerId: number) => {
+        const correct: boolean = question!.correctId === answerId;
+        if (correct) {
+            setTotalResults(totalResults + 1);
+        }
+
+        setCorrectAnswer({
+            correct,
+            text: question!.answers.find((a) => a.id === question!.correctId)!.heading,
+        })
+
+        setAnswered(true);
+    }
+
+    const next = () => {
+        if (!questions[index + 1]) {
+            setCompleted(true);
+            return;
+        }
+
+        setIndex(index + 1);
+    }
+
+    const reset = () => {
+        setTotalResults(0);
+        setCompleted(false);
+        setIndex(0);
+    }
+
     return (
         <div className="wrapper">
-            <header className="header primary-container">
-                <div className="logo">Quiz!</div>
-                <div className="spacer"></div>
-                <div className="counter">Вопрос: 2 из 15</div>
-            </header>
+            <Header index={index} total={total}/>
 
             <div className="main">
-                <div className="rows">
-                    <div className="card">
-                        <h1 className="heading question__heading">Что такое HTML?</h1>
-
-                        <form className="question__answers rows">
-                            <div className="radio-group rows">
-                                <label className="form-label radio-group-item">
-                                    <input type="radio" name="answer" value="1" checked disabled/>
-                                    Язык разметки
-                                </label>
-
-                                <label className="form-label radio-group-item">
-                                    <input type="radio" name="answer" value="2" disabled/>
-                                    Таблицы стилей
-                                </label>
-
-                                {/*<label>*/}
-                                {/*  <span className="form-label">Ответ</span>*/}
-                                {/*  <input className="text-field" type="text"/>*/}
-                                {/*</label>*/}
-                            </div>
-
-                            <div className="form-footer">
-                                <button disabled className="btn--cta btn btn--primary" type="submit">Отправить</button>
-                            </div>
-                        </form>
-                    </div>
-
-                    <div className="correct-answer">
-                        <h2 className="heading heading--sub text-success">Верно!</h2>
-                        {/*<h2 className="heading heading--sub text-fail">Неверно!</h2>*/}
-
-                        <p>
-                            HTML - это язык разметки
-                        </p>
-
-                        <button className="btn btn--default" type="button">Далее</button>
-                    </div>
-                </div>
-
-                {/*<div className="card results">*/}
-                {/*  <p className="results__text">Вы ответили корректно на 4 из 15 вопросов!</p>*/}
-
-                {/*  <button type="button" className="btn btn--primary">Начать заново</button>*/}
-                {/*</div>*/}
+                {
+                    !completed
+                        ?
+                        <div className="rows">
+                            {question && <Question question={question} answered={userAnswered}/>}
+                            {answered && correctAnswer && <CorrectAnswer answer={correctAnswer} next={next}/>}
+                        </div>
+                        :
+                        <Results correct={totalResults} total={total} reset={reset}/>
+                }
             </div>
 
-            <footer className="footer primary-container">Codemasters International, 2022 &copy;</footer>
+            <Footer/>
         </div>
     );
 }
