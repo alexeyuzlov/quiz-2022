@@ -1,0 +1,38 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: var(--border-radius);
+  color: var(--text-color);
+  min-height: 32px;
+  box-sizing: border-box;
+
+  &--primary {
+    background: var(--primary-color);
+    border: none;
+    color: var(--primary-text-color);
+
+    &:hover {
+      background: #1a83e8;
+    }
+
+    &:disabled {
+      background: #737d88;
+    }
+  }
+
+  &--default {
+    border: 1px solid #ccc;
+    background: transparent;
+
+    &:hover {
+      background: #d2d2d2;
+    }
+  }
+}
+
+
+.btn--cta {
+  width: 100%;
+}
